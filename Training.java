@@ -110,6 +110,14 @@ public class Training{
   public static Map<K, Map<K, V>> logProb(HashMap<String, HashMap<String, Integer>> map){
     double prob = 0.0;
     for (String key : map){
+      Map<K,V> innerMap = map.get(key);
+      int total = 0;
+      for (String key2: innerMap){
+        total += innerMap.get(key2);
+      }
+      for (String key2: innerMap){
+        innerMap.put(key2, innerMap.get(key2) / total);
+      }
 
     }
 

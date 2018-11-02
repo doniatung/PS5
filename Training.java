@@ -53,7 +53,7 @@ public class Training{
       return observations;
     }
     catch (Exception e){
-      System.out.println(e.printStackTrace());
+      e.printStackTrace();
     }
     finally{
       wordsInput.close();
@@ -100,12 +100,32 @@ public class Training{
       return transitions;
     }
     catch(Exception e){
-      System.out.println(e.printStackTrace());
+      e.printStackTrace();
     }
     finally{
       input.close();
     }
   }
+
+  public static Map<K, Map<K, V>> logProb(HashMap<String, HashMap<String, Integer>> map){
+    double prob = 0.0;
+    for (String key : map){
+
+    }
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

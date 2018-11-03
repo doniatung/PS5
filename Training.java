@@ -32,34 +32,62 @@ public class Training{
       String posLine = posInput.readLine();
       String wordsLine = wordsInput.readLine();
       while (wordsLine != null && posLine != null){
+        //System.out.println(observations);
         wordsLine = wordsLine.toLowerCase();
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
-        for (int i = 0; i < wordsPerLine.length; i ++){
+        //System.out.println(wordsPerLine.length-1);
+        for (int i = 0; i < wordsPerLine.length-1; i ++){
           HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
-          wordsAndCounts = observations.get(posPerLine[i]);
-          if (observations.containsKey(posPerLine[i]) && wordsAndCounts.containsKey(wordsPerLine[i]) ) {
-              wordsAndCounts.put(wordsPerLine[i], wordsAndCounts.get(wordsPerLine[i]) + 1);
+          //System.out.println(wordsPerLine[i]);
+          //System.out.println(posPerLine[i]);
+          //System.out.println(" pos per line: " + observations.get(posPerLine[i]));
+          if (observations.containsKey(posPerLine[i])){
+            //System.out.println("already there:" + observations.get(posPerLine[i]));
+            wordsAndCounts = observations.get(posPerLine[i]);
+
+            if (observations.get(posPerLine[i]).containsKey(wordsPerLine[i])){
+              //System.out.println("words and counts before add: " + wordsAndCounts);
+              Double num = wordsAndCounts.get(wordsPerLine[i]) + 1;
+              //System.out.println(num);
+              wordsAndCounts.put(wordsPerLine[i], num);
+            }
+            else{
+              wordsAndCounts.put(wordsPerLine[i], 1.0);
+              //System.out.println("with the new word: " + wordsAndCounts);
+            }
           }
           else{
+            //System.out.println("i : " + i);
+            //System.out.println("the given word: " + wordsPerLine[i]);
+            //System.out.println("the list: " + wordsAndCounts);
             wordsAndCounts.put(wordsPerLine[i], 1.0);
           }
+          //System.out.println(wordsAndCounts);
+          //System.out.println(observations);
           observations.put(posPerLine[i], wordsAndCounts);
+          //System.out.println(" pos per line after: " + observations.get(posPerLine[i]));
         }
         posLine = posInput.readLine();
         wordsLine = wordsInput.readLine();
+        //System.out.println(posLine);
+        //System.out.println(wordsLine);
+        //System.out.println("current state of observations: " + observations);
+        //System.out.println("------------------------------------------");
+        }
       }
-    }
+
     /*catch (Exception e){
       e.printStackTrace();
     }*/
-    catch(IOException e){
+    catch (IOException e){
       e.printStackTrace();
     }
     finally{
       wordsInput.close();
       posInput.close();
     }
+    System.out.println(observations);
     return observations;
 
   }
@@ -79,7 +107,7 @@ public class Training{
     try{
       input = new BufferedReader(new FileReader(pathName));
       String line = input.readLine();
-      while (line!= null){
+      while (line != null){
         line = line.toLowerCase();
         String[] states = line.split(" ");
         for (int i = 0; i < states.length -1; i ++){
@@ -101,12 +129,13 @@ public class Training{
             transitions.put(states[i], val);
           }
         }
+        line = input.readLine();
       }
     }
     /*catch(Exception e){
       e.printStackTrace();
     }*/
-    catch(IOException e){
+    catch (IOException e){
       e.printStackTrace();
     }
     finally{

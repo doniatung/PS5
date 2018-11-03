@@ -9,7 +9,6 @@ import java.util.*;
 import java.io.*;
 
 public class Training{
-
   //STATES = parts of speech tags
   //TRANSITIONS = tag to tag, with weights
   //OBSERVATIONS = tag to word, with weights
@@ -17,12 +16,11 @@ public class Training{
 /**
 * Method to create a Map keeping track of the number of times of each observation
 *
+* @param wordsPathName    location of file containing the total string of training sentence data.
+* @param posPathName      location of file containing the parts of speech of every word in the sentence file
 * @return    a HashMap of observations in which each Key is a String of a word in the file,
 *           and each Value is another Map, containing all of the parts of speech in the file as
 *           Keys and the Integer of the number of times a given word is used as a given part of speech
-*
-* @param wordsPathName    location of file containing the total string of training sentence data.
-* @param posPathName      location of file containing the parts of speech of every word in the sentence file
 */
   public static HashMap<String, HashMap<String, Double>> fileToObv(String wordsPathName, String posPathName) throws IOException{
     BufferedReader wordsInput = null;
@@ -69,12 +67,11 @@ public class Training{
   /**
   * Method to create a Map keeping track of the number of times of each transition between parts of speech
   *
+  * @param pathName    location of file containing the parts of speech for the words in the training data
   * @return    a HashMap of transitions in which each Key is a part of speech in the file,
   *           and each Value is another Map, containing all of the parts of speech in the file as
   *           Keys and the Integer of the number of times a transition is made between the first part
   *           of speech and the second.
-  *
-  * @param pathName    location of file containing the parts of speech for the words in the training data
   */
   public static HashMap<String, HashMap<String, Double>> fileToTrans(String pathName) throws IOException{
     BufferedReader input = null;
@@ -118,6 +115,13 @@ public class Training{
     return transitions;
   }
 
+  /**
+  * Method to convert what was just a simple count of instances of an observation or transitions
+  * into a log base e probability
+  *
+  * @param map    the map of information to be converted into log probability
+  * @return     the original map, with integers converted to log probability values
+\  */
   public static HashMap<String, HashMap<String, Double>> logProb(HashMap<String, HashMap<String, Double>> map){
     for (String key : map.keySet()){
       HashMap<String,Double> innerMap = map.get(key);

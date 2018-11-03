@@ -5,7 +5,8 @@
 Class of methods that "train" the computer to recognize parts of speech, given training files
 */
 
-
+import java.util.*;
+import java.io.*;
 
 public class Training{
 
@@ -23,42 +24,46 @@ public class Training{
 * @param wordsPathName    location of file containing the total string of training sentence data.
 * @param posPathName      location of file containing the parts of speech of every word in the sentence file
 */
-  public static Map<K, Map<K, V>> fileToObv(String wordsPathName, String posPathName){
+  public static HashMap<String, HashMap<String, Double>> fileToObv(String wordsPathName, String posPathName) throws IOException{
     BufferedReader wordsInput = null;
     BufferedReader posInput = null;
-    Map<String, Map<String, Integer>> observations = new HashMap<String, HashMap<String, Integer>>();
+    HashMap<String, HashMap<String, Double>> observations = new HashMap<String, HashMap<String, Double>>();
     try{
       posInput = new BufferedReader(new FileReader(posPathName));
       wordsInput = new BufferedReader(new FileReader(wordsPathName));
-      String posLine = posLine.readLine();
+      String posLine = posInput.readLine();
       String wordsLine = wordsInput.readLine();
       while (wordsLine != null && posLine != null){
         wordsLine = wordsLine.toLowerCase();
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
         for (int i = 0; i < wordsPerLine.length; i ++){
-          Map<String, Integer> wordsAndCounts = new HashMap<String, Integer>();
+          HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
           wordsAndCounts = observations.get(posPerLine[i]);
-          if (observations.hasKey(posPerLine[i]) && wordsAndCounts.hasKey(wordsPerLine[i]))){
+          if (observations.containsKey(posPerLine[i]) && wordsAndCounts.containsKey(wordsPerLine[i]) ) {
               wordsAndCounts.put(wordsPerLine[i], wordsAndCounts.get(wordsPerLine[i]) + 1);
           }
           else{
-            wordsAndCounts.put(wordsPerLine[i], 1);
+            wordsAndCounts.put(wordsPerLine[i], 1.0);
           }
-          observations.put(posPerLine[i], wordsAndCounts);=
+          observations.put(posPerLine[i], wordsAndCounts);
         }
         posLine = posInput.readLine();
         wordsLine = wordsInput.readLine();
       }
-      return observations;
     }
-    catch (Exception e){
+    /*catch (Exception e){
+      e.printStackTrace();
+    }*/
+    catch(IOException e){
       e.printStackTrace();
     }
     finally{
       wordsInput.close();
       posInput.close();
     }
+    return observations;
+
   }
 
   /**
@@ -71,9 +76,9 @@ public class Training{
   *
   * @param pathName    location of file containing the parts of speech for the words in the training data
   */
-  public static Map<K, Map<K, V>> fileToTrans(String pathName){
+  public static HashMap<String, HashMap<String, Double>> fileToTrans(String pathName) throws IOException{
     BufferedReader input = null;
-    Map<String, Map<String, Integer>> transitions = new HashMap<String, HashMap<String, Integer>>();
+    HashMap<String, HashMap<String, Double>> transitions = new HashMap<String, HashMap<String, Double>>();
     try{
       input = new BufferedReader(new FileReader(pathName));
       String line = input.readLine();
@@ -81,59 +86,51 @@ public class Training{
         line = line.toLowerCase();
         String[] states = line.split(" ");
         for (int i = 0; i < states.length -1; i ++){
-          if (transitions.hasKey(states[i])){
-            String nextState = transitions.get(states[i]).get(states[i+1]);
-            if (transitions.get(states[i].hasKey(states[i+1]))){
-              transitions.get(states[i]).put(nextState, transitions.get(nextState) + 1);
+          String nextState = states[i+1];
+          if (transitions.containsKey(states[i])){
+            HashMap<String, Double> current = transitions.get(states[i]);
+            if (current.containsKey(nextState)){
+              current.put(nextState, current.get(nextState) + 1);
+              transitions.put(states[i], current);
             }
             else{
-              transitions.get(states[i]).put(nextState, 1);
+              current.put(nextState, 1.0);
+              transitions.put(states[i], current);
             }
           }
           else{
-            HashMap<String, Integer> val = new HashMap<String, Integer>();
-            val.put(nextState, 1);
+            HashMap<String, Double> val = new HashMap<String, Double>();
+            val.put(nextState, 1.0);
             transitions.put(states[i], val);
           }
         }
       }
-      return transitions;
     }
-    catch(Exception e){
+    /*catch(Exception e){
+      e.printStackTrace();
+    }*/
+    catch(IOException e){
       e.printStackTrace();
     }
     finally{
       input.close();
     }
+    return transitions;
   }
 
-  public static Map<K, Map<K, V>> logProb(HashMap<String, HashMap<String, Integer>> map){
-    double prob = 0.0;
-    for (String key : map){
-      Map<K,V> innerMap = map.get(key);
+  public static HashMap<String, HashMap<String, Double>> logProb(HashMap<String, HashMap<String, Double>> map){
+    for (String key : map.keySet()){
+      HashMap<String,Double> innerMap = map.get(key);
       int total = 0;
-      for (String key2: innerMap){
+      for (String key2: innerMap.keySet()){
         total += innerMap.get(key2);
       }
-      for (String key2: innerMap){
-        innerMap.put(key2, innerMap.get(key2) / total);
+      for (String key2: innerMap.keySet()){
+        innerMap.put(key2, Math.log(innerMap.get(key2) / total));
       }
-
     }
-
-
+    return map;
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

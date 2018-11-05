@@ -1,8 +1,8 @@
 /**
-@author Donia Tung, CS10, Dartmouth Fall 2018
-@author Ray Jones, CS10, Dartmouth Fall 2018
+   @author Donia Tung, CS10, Dartmouth Fall 2018
+   @author Ray Jones, CS10, Dartmouth Fall 2018
 
-Main Class to be run
+   Main Class to be run
 */
 
 import java.util.*;
@@ -19,7 +19,7 @@ public class Main{
         System.out.println(lineOut);
     }
     
-   /**
+    /**
      * fileVit
      *
      * Method to run the Viterbi tagging procedure on a file, then return a new file that has been tagged. 
@@ -125,27 +125,27 @@ public class Main{
      * @param str the given string to be tested
      */
     public static void viterbiTest(HashMap<String, HashMap<String, Double>> ob, HashMap<String, HashMap<String, Double>> tr, String str){
-      System.out.println(ViterbiTrace.toVitLine(str, tr, ob));
+	System.out.println(ViterbiTrace.toVitLine(str, tr, ob));
     }
 
 
-  public static void main(String[] args) throws IOException{
-    HashMap<String, HashMap<String, Double>> observations = Training.fileToObv("texts/brown-train-sentences.txt", "texts/brown-train-tags.txt");
-    HashMap<String, HashMap<String, Double>> transitions = Training.fileToTrans("texts/brown-train-tags.txt");
-    observations = Training.logProb(observations);
-    transitions = Training.logProb(transitions);
-    //viterbiTest(observations, transitions, "cave is beautiful ."); // N V ADJ
-    //viterbiTest(observations, transitions, "we work for trains ."); // PRO V P N
-    //viterbiTest(observations, transitions, "my dog is beautiful ."); // PRO N V ADJ
-    //viterbiTest(observations, transitions, "we watch in the night ."); // PRO V P DET N    
+    public static void main(String[] args) throws IOException{
+	HashMap<String, HashMap<String, Double>> observations = Training.fileToObv("texts/brown-train-sentences.txt", "texts/brown-train-tags.txt");
+	HashMap<String, HashMap<String, Double>> transitions = Training.fileToTrans("texts/brown-train-tags.txt");
+	observations = Training.logProb(observations);
+	transitions = Training.logProb(transitions);
+	//viterbiTest(observations, transitions, "cave is beautiful ."); // N V ADJ
+	//viterbiTest(observations, transitions, "we work for trains ."); // PRO V P N
+	//viterbiTest(observations, transitions, "my dog is beautiful ."); // PRO N V ADJ
+	//viterbiTest(observations, transitions, "we watch in the night ."); // PRO V P DET N    
         String tests = "texts/brown-test-sentences.txt", tags = "texts/brown-test-tags.txt";
-    //System.out.println(observations);
-    //System.out.println(transitions);
+	//System.out.println(observations);
+	//System.out.println(transitions);
         String taggedFile = fileVit(tests, transitions, observations); // tag the file
         System.out.println("The file is tagged and save as " + taggedFile + ".");
         evalAccuracy(tags, taggedFile); // print the percentages
         VitConsole(transitions, observations); // console input tags
-  }
+    }
 
 
 }

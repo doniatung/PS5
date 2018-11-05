@@ -34,11 +34,10 @@ public class Training{
       while (wordsLine != null && posLine != null){
 
         wordsLine = wordsLine.toLowerCase();
-        posLine = posLine.toLowerCase();
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
 
-        if (observations.containsKey("#")){
+        /*if (observations.containsKey("#")){
           HashMap<String, Double> wnc = new HashMap<String, Double>();
           wnc = observations.get("#");
           if (wnc.containsKey(wordsPerLine[0])){
@@ -55,7 +54,7 @@ public class Training{
           HashMap<String, Double> map = new HashMap<String, Double>();
           map.put(wordsPerLine[0], 1.0);
           observations.put("#", map);
-        }
+        }*/
         for (int i = 0; i < wordsPerLine.length-1; i ++){
           HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
           if (observations.containsKey(posPerLine[i])){
@@ -107,7 +106,6 @@ public class Training{
       input = new BufferedReader(new FileReader(pathName));
       String line = input.readLine();
       while (line != null){
-        line = line.toLowerCase();
         String[] states = line.split(" ");
 
         for (int i = 0; i < states.length-1; i ++){
@@ -157,7 +155,6 @@ public class Training{
     finally{
       input.close();
     }
-    //System.out.println(transitions);
     return transitions;
   }
 
@@ -175,8 +172,6 @@ public class Training{
       for (String key2: innerMap.keySet()){
         total += innerMap.get(key2);
       }
-      //System.out.println(key);
-      //System.out.println(total);
       for (String key2: innerMap.keySet()){
         innerMap.put(key2, Math.log(innerMap.get(key2) / total));
       }

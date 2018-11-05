@@ -37,6 +37,24 @@ public class Training{
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
         //System.out.println(wordsPerLine.length-1);
+        if (observations.containsKey("#")){
+          HashMap<String, Double> wnc = new HashMap<String, Double>();
+          wnc = observations.get("#");
+          if (wnc.containsKey(wordsPerLine[0])){
+            Double num = wnc.get(wordsPerLine[0]) +1;
+            wnc.put(wordsPerLine[0], num);
+            observations.put("#", wnc);
+          }
+          else{
+            wnc.put(wordsPerLine[0], 1.0);
+            observations.put("#", wnc);
+          }
+        }
+        else{
+          HashMap<String, Double> map = new HashMap<String, Double>();
+          map.put(wordsPerLine[0], 1.0);
+          observations.put("#", map);
+        }
         for (int i = 0; i < wordsPerLine.length-1; i ++){
           HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
           //System.out.println(wordsPerLine[i]);
@@ -104,12 +122,29 @@ public class Training{
   public static HashMap<String, HashMap<String, Double>> fileToTrans(String pathName) throws IOException{
     BufferedReader input = null;
     HashMap<String, HashMap<String, Double>> transitions = new HashMap<String, HashMap<String, Double>>();
+
     try{
       input = new BufferedReader(new FileReader(pathName));
       String line = input.readLine();
       while (line != null){
         line = line.toLowerCase();
         String[] states = line.split(" ");
+        if (transitions.containsKey("#")){
+              HashMap<String, Double> current = transitions.get("#");
+            if (current.containsKey(states[0])){
+              current.put(states[0], current.get(states[0]) + 1);
+              transitions.put("#", current);
+            }
+            else{
+              current.put(states[0], 1.0);
+              transitions.put("#", current);
+            }
+          }
+          else{
+            HashMap<String, Double> val = new HashMap<String, Double>();
+            val.put(states[0], 1.0);
+            transitions.put("#", val);
+          }
         for (int i = 0; i < states.length -1; i ++){
           String nextState = states[i+1];
           if (transitions.containsKey(states[i])){

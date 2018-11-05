@@ -12,10 +12,8 @@ public class Main{
         System.out.println(lineOut);
     }
 
-    public static void viterbiTest(String string){
-
-
-      
+    public static void viterbiTest(HashMap<String, HashMap<String, Double>> ob, HashMap<String, HashMap<String, Double>> tr, String str){
+      System.out.println(ViterbiTrace.toVitLine(str, tr, ob));
     }
 
   public static void main(String[] args) throws IOException{
@@ -23,8 +21,11 @@ public class Main{
     HashMap<String, HashMap<String, Double>> transitions = Training.fileToTrans("texts/simple-train-tags.txt");
     observations = Training.logProb(observations);
     transitions = Training.logProb(transitions);
-    //System.out.println(observations);
-    //System.out.println(transitions);
+    //viterbiTest(observations, transitions, "cave is beautiful ."); // N V ADJ
+    //viterbiTest(observations, transitions, "we work for trains ."); // PRO V P N
+    //viterbiTest(observations, transitions, "my dog is beautiful ."); // PRO N V ADJ
+    //viterbiTest(observations, transitions, "we watch in the night ."); // PRO V P DET N
+
     VitConsole(observations, transitions);
 
   }

@@ -1,0 +1,15 @@
+Donia Tung & Ray Jones
+CS10, Dartmouth Fall 2018
+
+
+Super Basic Viterbi Testing: The simple hard-coded graphs and input strings that we tested with our Viterbi model all seemed to run fine. We wrote out what the expected results would be for the sentences, and the program printed out exactly what we expected.
+
+1. Sentences that are tagged as expected: "my watch glows in the night ."
+
+2. Sentences that aren't: "the dog saw trains in the night ." ; "his work is to bark in a cave"
+
+We think this happened because of the probability of certain circumstances re: the inputted training data. There are certain tags that are really disproportionately followed by other tags, and thus the computer sometimes misses catching the instances in which some parts of speech patterns stray from the norm, simple because the probability of those circumstances is so low. 
+
+
+
+Overall testing performance: Making the unseen penalty bigger makes the margin of error (aka the number of tests we get wrong) smaller. At first, we had the unseen penalty = to -10, but when we changed it to -100, there was a significance difference (~3,000 words from the brown file tests) in the number of cases we got correct. The fact that we used a natural log also makes some difference

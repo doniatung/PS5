@@ -1,7 +1,23 @@
+/**
+@author Donia Tung, CS10, Dartmouth Fall 2018
+@author Ray Jones, CS10, Dartmouth Fall 2018
+
+Class to do Viterbi tagging
+*/
 import java.util.*;
 import java.io.*;
 
 public class ViterbiTrace {
+
+    /**
+     * toVitLine
+     *
+     * Method to run the Viterbi tagging procedure on one line
+     * @param lineIn string of the line that is being worked on 
+     * @param trans map of transitions
+     * @param obs map of observations
+     * @return string of Viterbi tags
+     */
 
 
 	public static String toVitLine(String lineIn, HashMap<String, HashMap<String, Double>> trans, HashMap<String, HashMap<String, Double>> observs){

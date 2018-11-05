@@ -10,8 +10,17 @@ import java.io.*;
 
 
 public class Main{
+    
+    /**
+     * vitConsole
+     *
+     * Method to run the Viterbi tagging procedure on a user input from console
+     * @param tr map of transitions
+     * @param ob map of observations
+     * @return tagged line
+     */
 
-    public static void VitConsole(HashMap<String, HashMap<String, Double>> ob, HashMap<String, HashMap<String, Double>> tr){
+    public static void VitConsole(HashMap<String, HashMap<String, Double>> tr, HashMap<String, HashMap<String, Double>> ob){
         Scanner scan = new Scanner(System.in);
         System.out.println("Type a sentence and view the tagged result:");
         String lineIn = scan.nextLine();
@@ -33,7 +42,8 @@ public class Main{
         BufferedReader input = null;
         BufferedWriter output = null;
         try{
-            tagsFile = file.substring(0,file.length()-4) + "_Viterbi_tag.txt";
+            // remove .txt and add the new kind of file name
+            tagsFile = file.substring(0,file.length()-4) + "_ViterbiTagged.txt";
             input = new BufferedReader(new FileReader(file));
             output = new BufferedWriter(new FileWriter(tagsFile));
             String lineIn = null;
@@ -58,7 +68,7 @@ public class Main{
             catch(Exception e){
                 e.printStackTrace();
             }
-            return(tagsFile);
+            return tagsFile;
         }
     }
 

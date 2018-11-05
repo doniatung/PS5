@@ -44,12 +44,14 @@ public class ViterbiTrace {
 	    Map<String,String> backPoint = new TreeMap<>();
 	    double score;
 	    String currMin = "";
+	    //iterate through the previous states
 	    for (String st : previousStates){
+	    //check for the state in the transitions
 		if(trans.containsKey(st) && !trans.get(st).isEmpty()){
 		    for (String tr : trans.get(st).keySet()){
 			nextStates.add(tr);
+			//change the score, with a penalty if it's not in observations
 			if(observs.containsKey(tr) && observs.get(tr).containsKey(wordArray[j])){
-
 			    score = previousScores.get(st) + trans.get(st).get(tr) + observs.get(tr).get(wordArray[j]);
 			}
 			else {

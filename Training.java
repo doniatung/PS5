@@ -23,21 +23,28 @@ public class Training{
 *           Keys and the Integer of the number of times a given word is used as a given part of speech
 */
   public static HashMap<String, HashMap<String, Double>> fileToObv(String wordsPathName, String posPathName) throws IOException{
+    //initialize BufferedReaders and ap to put observations in
     BufferedReader wordsInput = null;
     BufferedReader posInput = null;
     HashMap<String, HashMap<String, Double>> observations = new HashMap<String, HashMap<String, Double>>();
     try{
+      //try to open files
       posInput = new BufferedReader(new FileReader(posPathName));
       wordsInput = new BufferedReader(new FileReader(wordsPathName));
       String posLine = posInput.readLine();
       String wordsLine = wordsInput.readLine();
+      //While there are more lines in each of the given files
       while (wordsLine != null && posLine != null){
-
+        //Lowercase the sentence file, and split both on white space
         wordsLine = wordsLine.toLowerCase();
+        //posLine = posLine.toLowerCase();
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
-
-        /*if (observations.containsKey("#")){
+        //Checks for the '#' character, if it's already in the map,
+        //checks if the first word in the sentence is already in the inner map
+        //if it is, then add 1 to the integer value associated with it, if not,
+        //add it to the map with an integer value of 1.0
+        if (observations.containsKey("#")){
           HashMap<String, Double> wnc = new HashMap<String, Double>();
           wnc = observations.get("#");
           if (wnc.containsKey(wordsPerLine[0])){
@@ -54,40 +61,49 @@ public class Training{
           HashMap<String, Double> map = new HashMap<String, Double>();
           map.put(wordsPerLine[0], 1.0);
           observations.put("#", map);
-        }*/
+        }
+        //for each word in line of the given string
         for (int i = 0; i < wordsPerLine.length-1; i ++){
           HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
+          //if the map already contains the part of speech
           if (observations.containsKey(posPerLine[i])){
+            //get the inner map associated with that part of speech
             wordsAndCounts = observations.get(posPerLine[i]);
-
+            //if that inner map contains the associated word
+            //add 1 to the integer value
             if (wordsAndCounts.containsKey(wordsPerLine[i])){
               Double num = wordsAndCounts.get(wordsPerLine[i]) + 1;
               wordsAndCounts.put(wordsPerLine[i], num);
             }
+            //else, add the word to the inner map with int value of 1
             else{
               wordsAndCounts.put(wordsPerLine[i], 1.0);
             }
           }
+          //else, add the word to an empty map with the int value of 1
           else{
             wordsAndCounts.put(wordsPerLine[i], 1.0);
           }
+          //add the part of speech and associated inner map to the observations map.
           observations.put(posPerLine[i], wordsAndCounts);
         }
+        //read the next lines in each of the files
         posLine = posInput.readLine();
         wordsLine = wordsInput.readLine();
         }
       }
-    catch (IOException e){
-      e.printStackTrace();
+      //Catch exceptions
+      catch (IOException e){
+        e.printStackTrace();
+      }
+      //close files
+      finally{
+        wordsInput.close();
+        posInput.close();
+      }
+      //return created map
+      return observations;
     }
-    finally{
-      wordsInput.close();
-      posInput.close();
-    }
-    //System.out.println(observations);
-    return observations;
-
-  }
 
   /**
   * Method to create a Map keeping track of the number of times of each transition between parts of speech
@@ -103,13 +119,22 @@ public class Training{
     HashMap<String, HashMap<String, Double>> transitions = new HashMap<String, HashMap<String, Double>>();
 
     try{
+      //Read in file of parts of speech
       input = new BufferedReader(new FileReader(pathName));
       String line = input.readLine();
+      //While the next line is not null,
       while (line != null){
+        //line = line.toLowerCase();
+        //Split on white space
         String[] states = line.split(" ");
-
+        //for each part of speech in the line
         for (int i = 0; i < states.length-1; i ++){
+          //if it's the first POS in the line
           if (i == 0){
+            //Checks for the '#' character, if it's already in the map,
+            //checks if the first POS in the sentence is already in the inner map
+            //if it is, then add 1 to the integer value associated with it, if not,
+            //add it to the map with an integer value of 1.0
             if (transitions.containsKey("#")){
                   HashMap<String, Double> current = transitions.get("#");
                 if (current.containsKey(states[0])){
@@ -128,18 +153,26 @@ public class Training{
                 transitions.put("#", val);
               }
           }
+          //set nextState = to the next state in line
           String nextState = states[i+1];
+          //if the transitions map already as the given part of speech
           if (transitions.containsKey(states[i])){
+            //set current = to the inner map
             HashMap<String, Double> current = transitions.get(states[i]);
+            //if the inner map has the next part of speech, add one to the int value
             if (current.containsKey(nextState)){
               current.put(nextState, current.get(nextState) + 1);
               transitions.put(states[i], current);
             }
+            //else, add it to the inner map
+            //then put that inner map into the transitions map
             else{
               current.put(nextState, 1.0);
               transitions.put(states[i], current);
             }
           }
+          //else, create a new map, add the next state with a value of 1
+          //add it to the transitions map
           else{
             HashMap<String, Double> val = new HashMap<String, Double>();
             val.put(nextState, 1.0);
@@ -149,12 +182,15 @@ public class Training{
         line = input.readLine();
       }
     }
+    //catch exceptions
     catch (IOException e){
       e.printStackTrace();
     }
+    //close the file
     finally{
       input.close();
     }
+    //return the map
     return transitions;
   }
 
@@ -166,16 +202,20 @@ public class Training{
   * @return     the original map, with integers converted to log probability values
 \  */
   public static HashMap<String, HashMap<String, Double>> logProb(HashMap<String, HashMap<String, Double>> map){
+    //for each key in the given map
     for (String key : map.keySet()){
       HashMap<String,Double> innerMap = map.get(key);
       Double total = 0.0;
+      //loop through the inner map, add integer values to total
       for (String key2: innerMap.keySet()){
         total += innerMap.get(key2);
       }
+      //loop through the inner map, set the integer values to log probability
       for (String key2: innerMap.keySet()){
         innerMap.put(key2, Math.log(innerMap.get(key2) / total));
       }
     }
+    //return new map
     return map;
   }
 

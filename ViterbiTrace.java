@@ -20,10 +20,14 @@ public class ViterbiTrace {
      */
 
     public static String toVitLine(String lineIn, HashMap<String, HashMap<String, Double>> trans, HashMap<String, HashMap<String, Double>> observs){
+	// default start value
 	String startVal = "#";
+	// unseen penalty of -100
 	double unseen = -100.0;
+	//initialize blank line to be rerturned
 	String lineOut = "";
 	String lastTag = "";
+	//set highest score to negative infinity so that it gets beaten certainly
 	double highScore = Double.NEGATIVE_INFINITY;
 	String[] wordArray = lineIn.split(" ");
 	List<Map<String,String>> backtracking = new ArrayList<Map<String,String>>();
@@ -33,7 +37,7 @@ public class ViterbiTrace {
 	Map<String, Double> previousScores = new TreeMap<>();
 
 	previousScores.put(startVal, 0.0);
-
+	// iterate through the words
 	for (int j = 0; j<wordArray.length; j++) {
 	    Set<String> nextStates = new TreeSet<>();
 	    Map<String,Double> nextScores = new TreeMap<>();
@@ -62,9 +66,11 @@ public class ViterbiTrace {
 		    }
 		}
 	    }
+	    // move on to next scores and states
 	    previousScores = nextScores;
 	    previousStates = nextStates;
 	}
+	// iterate through previous scores, finding the highest score among them
 	for(String sco : previousScores.keySet()){
 	    if(previousScores.get(sco) > highScore){
 		highScore = previousScores.get(sco);
@@ -73,15 +79,16 @@ public class ViterbiTrace {
 	}
 
 	printStrings.push(lastTag);
+	// go backwards through the wordArray
 	for(int i = wordArray.length - 1; i > 0; i--){
 	    printStrings.push(backtracking.get(i).get(printStrings.peek()));
 	}
-
+	//pop everything in the stack, if it contains anything
 	while(!printStrings.isEmpty()){
 	    lineOut += printStrings.pop() + " ";
 	}
 
-
+	// return the tagged line
 	return lineOut;
     }
 

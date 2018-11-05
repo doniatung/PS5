@@ -74,31 +74,44 @@ public class Main{
         BufferedReader inputA = null;
         BufferedReader inputB = null;
         try{
+            //twp inputs for two files
             inputA = new BufferedReader(new FileReader(fileA));
             inputB = new BufferedReader(new FileReader(fileB));
             String strA = null;
             String strB = null;
             String[] tagsA = null;
             String[] tagsB = null;
-            int countAll = 0, correct = 0;
+            // count of total tags
+            int countAll = 0;
+            // count of correct tags
+            int correct = 0;
 
+            //set strings for the active line
             strA = inputA.readLine();
             strB = inputB.readLine();
             while(strA != null){
+                // set array of strings to all of the words in the string
                 tagsA = strA.split(" ");
                 tagsB = strB.split(" ");
                 for(int i=0; i < tagsA.length; i++){ 
+                    // if tag from A is the same as tag from B
                     if(tagsA[i].equals(tagsB[i])){
+                        // add one to correct counter
                         correct++;
                     }
                 }
                 countAll += tagsA.length; 
+                //move active string to next
                 strA = inputA.readLine();
                 strB = inputB.readLine();
             }
             // print the statistics
-            System.out.println("Testing: "+fileA);
+
+            //name of file being tested
+            System.out.println("Testing: " + fileA);
+            //total
             System.out.println(countAll+" total tags.");
+            // percentage correct
             System.out.println((float)correct / countAll *100+ "% of the tags are correct.");
 
         }
@@ -106,6 +119,7 @@ public class Main{
             e.printStackTrace();
         }
         finally{
+            //try closing the two files, ancd catch an exception if something goes wrong
             try{
                 inputA.close();
                 inputB.close();

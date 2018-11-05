@@ -32,13 +32,13 @@ public class Training{
       String posLine = posInput.readLine();
       String wordsLine = wordsInput.readLine();
       while (wordsLine != null && posLine != null){
-        //System.out.println(observations);
+
         wordsLine = wordsLine.toLowerCase();
         posLine = posLine.toLowerCase();
         String[] wordsPerLine = wordsLine.split(" ");
         String[] posPerLine = posLine.split(" ");
-        //System.out.println(wordsPerLine.length-1);
-        if (observations.containsKey("#")){
+
+        /*if (observations.containsKey("#")){
           HashMap<String, Double> wnc = new HashMap<String, Double>();
           wnc = observations.get("#");
           if (wnc.containsKey(wordsPerLine[0])){
@@ -55,7 +55,7 @@ public class Training{
           HashMap<String, Double> map = new HashMap<String, Double>();
           map.put(wordsPerLine[0], 1.0);
           observations.put("#", map);
-        }
+        }*/
         for (int i = 0; i < wordsPerLine.length-1; i ++){
           HashMap<String, Double> wordsAndCounts = new HashMap<String, Double>();
           if (observations.containsKey(posPerLine[i])){
@@ -109,23 +109,27 @@ public class Training{
       while (line != null){
         line = line.toLowerCase();
         String[] states = line.split(" ");
-        if (transitions.containsKey("#")){
-              HashMap<String, Double> current = transitions.get("#");
-            if (current.containsKey(states[0])){
-              current.put(states[0], current.get(states[0]) + 1);
-              transitions.put("#", current);
-            }
-            else{
-              current.put(states[0], 1.0);
-              transitions.put("#", current);
-            }
+
+        for (int i = 0; i < states.length-1; i ++){
+          if (i == 0){
+            if (transitions.containsKey("#")){
+                  HashMap<String, Double> current = transitions.get("#");
+                if (current.containsKey(states[0])){
+                  double newval = current.get(states[0]) + 1;
+                  current.put(states[0], newval);
+                  transitions.put("#", current);
+                }
+                else{
+                  current.put(states[0], 1.0);
+                  transitions.put("#", current);
+                }
+              }
+              else{
+                HashMap<String, Double> val = new HashMap<String, Double>();
+                val.put(states[0], 1.0);
+                transitions.put("#", val);
+              }
           }
-          else{
-            HashMap<String, Double> val = new HashMap<String, Double>();
-            val.put(states[0], 1.0);
-            transitions.put("#", val);
-          }
-        for (int i = 0; i < states.length -1; i ++){
           String nextState = states[i+1];
           if (transitions.containsKey(states[i])){
             HashMap<String, Double> current = transitions.get(states[i]);

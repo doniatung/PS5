@@ -12,6 +12,12 @@ public class Main{
         System.out.println(lineOut);
     }
 
+    public static void viterbiTest(String string){
+
+
+      
+    }
+
   public static void main(String[] args) throws IOException{
     HashMap<String, HashMap<String, Double>> observations = Training.fileToObv("texts/simple-train-sentences.txt", "texts/simple-train-tags.txt");
     HashMap<String, HashMap<String, Double>> transitions = Training.fileToTrans("texts/simple-train-tags.txt");

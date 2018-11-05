@@ -19,10 +19,9 @@ public class ViterbiTrace {
      * @return string of Viterbi tags
      */
 
-
 	public static String toVitLine(String lineIn, HashMap<String, HashMap<String, Double>> trans, HashMap<String, HashMap<String, Double>> observs){
 		String startVal = "#";
-		double unseen = -10.0;
+		double unseen = -100.0;
 		String lineOut = "";
 		String lastTag = "";
 		double highScore = Double.NEGATIVE_INFINITY;

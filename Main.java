@@ -17,8 +17,8 @@ public class Main{
     HashMap<String, HashMap<String, Double>> transitions = Training.fileToTrans("texts/simple-train-tags.txt");
     observations = Training.logProb(observations);
     transitions = Training.logProb(transitions);
-    System.out.println(observations);
-    System.out.println(transitions);
+    //System.out.println(observations);
+    //System.out.println(transitions);
     VitConsole(observations, transitions);
 
   }
